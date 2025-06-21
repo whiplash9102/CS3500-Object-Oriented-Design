@@ -1,10 +1,9 @@
 package cs3500.hw01.duration;
 
 /**
- * Durations represented compactly, with a range of 0 to
- * 2<sup>63</sup>-1 hours.
+ * Durations represented as weeks, days and hours.
  */
-public final class CompactDuration extends AbstractDuration {
+public final class WdhDuration extends AbstractDuration {
   /**
    * Constructs a duration in terms of its length in weeks, days, and
    * hours.
@@ -14,9 +13,9 @@ public final class CompactDuration extends AbstractDuration {
    * @param hours the number of hours
    * @throws IllegalArgumentException if any argument is negative
    */
-  public CompactDuration(int weeks, int days, int hours) {
+  public WdhDuration(int weeks, int days, int hours) {
+    this(inHours(weeks, days, hours));
     ensureWdh(weeks, days, hours);
-    this.inHours = inHours(weeks, days, hours);
   }
 
   /**
@@ -25,30 +24,38 @@ public final class CompactDuration extends AbstractDuration {
    * @param inHours the number of hours (non-negative)
    * @throws IllegalArgumentException {@code inHours} is negative
    */
-  public CompactDuration(long inHours) {
+  public WdhDuration(long inHours) {
     if (inHours < 0) {
       throw new IllegalArgumentException("must be non-negative");
     }
 
-    this.inHours = inHours;
+    hours = hoursOf(inHours);
+    days = daysOf(inHours);
+    weeks = weeksOf(inHours);
   }
 
-  private final long inHours;
+  private final int weeks;
+  private final int days;
+  private final int hours;
 
   @Override
-  protected Duration fromHours(long inHours) {
-    return new CompactDuration(inHours);
+  protected AbstractDuration fromHours(long inHours) {
+    return new WdhDuration(inHours);
   }
 
   @Override
   public long inHours() {
-    return inHours;
+    return inHours(weeks, days, hours);
   }
 
   @Override
   public String asWdh() {
-    return asWdh(weeksOf(inHours),
-                 daysOf(inHours),
-                 hoursOf(inHours));
+    return asWdh(weeks, days, hours);
   }
+  @Override
+  public String format(String formatType) {
+    // TODO: implement logic based on formatType
+    return "";
+}
+
 }

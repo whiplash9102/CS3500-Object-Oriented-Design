@@ -16,5 +16,5 @@ public class Lecture3Test {
 
     String expected = "Nguyen, A. (Ed.). (2025). Proceedings of the Future of AI (Hanoi). Springer.";
     assertEquals(expected, pub.citeApa());
-  }
+    }
 }

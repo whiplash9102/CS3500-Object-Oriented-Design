@@ -1,9 +1,10 @@
 package cs3500.hw01.duration;
 
 /**
- * Durations represented as weeks, days and hours.
+ * Durations represented compactly, with a range of 0 to
+ * 2<sup>63</sup>-1 hours.
  */
-public final class WdhDuration extends AbstractDuration {
+public final class CompactDuration extends AbstractDuration {
   /**
    * Constructs a duration in terms of its length in weeks, days, and
    * hours.
@@ -13,9 +14,9 @@ public final class WdhDuration extends AbstractDuration {
    * @param hours the number of hours
    * @throws IllegalArgumentException if any argument is negative
    */
-  public WdhDuration(int weeks, int days, int hours) {
-    this(inHours(weeks, days, hours));
+  public CompactDuration(int weeks, int days, int hours) {
     ensureWdh(weeks, days, hours);
+    this.inHours = inHours(weeks, days, hours);
   }
 
   /**
@@ -24,32 +25,36 @@ public final class WdhDuration extends AbstractDuration {
    * @param inHours the number of hours (non-negative)
    * @throws IllegalArgumentException {@code inHours} is negative
    */
-  public WdhDuration(long inHours) {
+  public CompactDuration(long inHours) {
     if (inHours < 0) {
       throw new IllegalArgumentException("must be non-negative");
     }
 
-    hours = hoursOf(inHours);
-    days = daysOf(inHours);
-    weeks = weeksOf(inHours);
+    this.inHours = inHours;
   }
 
-  private final int weeks;
-  private final int days;
-  private final int hours;
+  private final long inHours;
 
   @Override
-  protected AbstractDuration fromHours(long inHours) {
-    return new WdhDuration(inHours);
+  protected Duration fromHours(long inHours) {
+    return new CompactDuration(inHours);
   }
 
   @Override
   public long inHours() {
-    return inHours(weeks, days, hours);
+    return inHours;
   }
 
   @Override
   public String asWdh() {
-    return asWdh(weeks, days, hours);
+    return asWdh(weeksOf(inHours),
+                 daysOf(inHours),
+                 hoursOf(inHours));
   }
+
+  @Override
+public String format(String formatType) {
+    return "";
+}
+
 }
