@@ -2,7 +2,7 @@ package hw02.hwmodeling;
 
 public class Card {
     private final int value; // 1 - 13
-    private final Suit suit;
+    private final String suit;
 
     Card(int value, String suit) {
         if (value < 1 || value > 13 || suit == null){
@@ -16,5 +16,4 @@ public class Card {
     public int getValue() {
         return this.value;
     }
-    enum
 }
